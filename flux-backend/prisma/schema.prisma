@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  username      String?
+  refresh_token String?
+  boards        Board[]
+  tasks         Task[]
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Board {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id])
+  tasks       Task[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("boards")
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      Status   @default(BACKLOG)
+  board_id    String
+  board       Board    @relation(fields: [board_id], references: [id])
+  user_id     String?
+  user        User?    @relation(fields: [user_id], references: [id])
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("tasks")
+}
+
+enum Status {
+  BACKLOG
+  TODO
+  INPROGRESS
+  DONE
+  CANCELED
+}

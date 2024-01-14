@@ -8,7 +8,7 @@ docker-compose up -d
 ```
 this command will upload a postgresql database and start the api in a docker container
 
-for the nextjs application just navigate to the `flux` folder and start the command
+for the nextjs application just navigate to the `flux-frontend` folder and start the command
 
 ```bash 
 npm install
